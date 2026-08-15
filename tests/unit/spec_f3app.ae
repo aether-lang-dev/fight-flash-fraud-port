@@ -1,41 +1,41 @@
-import aeocha
+import std.spec
 import f3app
 
 main() {
-    fw = aeocha.init()
+    fw = spec.init()
 
-    aeocha.describe(fw, "fight_flash_fraud app text") {
-        aeocha.it("describes the simulation path honestly") callback {
-            aeocha.assert_str_eq(
+    spec.describe(fw, "fight_flash_fraud app text") {
+        spec.it("describes the simulation path honestly") callback {
+            spec.assert_str_eq(
                 f3app.path_description("/tmp/f3-aether-ui"),
                 "Simulation of 1MB flash",
                 "simulation path label")
         }
 
-        aeocha.it("describes picked media as claimed flash") callback {
-            aeocha.assert_str_eq(
+        spec.it("describes picked media as claimed flash") callback {
+            spec.assert_str_eq(
                 f3app.path_description("/media/paul/FLASH"),
                 "Claimed 32GB flash",
                 "flash mount label")
         }
 
-        aeocha.it("formats tested capacity") callback {
-            aeocha.assert_str_eq(f3app.tested_capacity_text(1, 1), "1MB", "one megabyte")
-            aeocha.assert_str_eq(f3app.tested_capacity_text(32, 1024), "32GB", "thirty two gigabytes")
-            aeocha.assert_str_eq(f3app.tested_capacity_text(3, 700), "2100MB", "non-whole GiB remains MB")
+        spec.it("formats tested capacity") callback {
+            spec.assert_str_eq(f3app.tested_capacity_text(1, 1), "1MB", "one megabyte")
+            spec.assert_str_eq(f3app.tested_capacity_text(32, 1024), "32GB", "thirty two gigabytes")
+            spec.assert_str_eq(f3app.tested_capacity_text(3, 700), "2100MB", "non-whole GiB remains MB")
         }
 
-        aeocha.it("reports human fraud verdicts") callback {
-            aeocha.assert_str_eq(
+        spec.it("reports human fraud verdicts") callback {
+            spec.assert_str_eq(
                 f3app.verification_result_text(1, 1, 0),
                 "Flash size is correct for tested 1MB. No fraud detected.",
                 "clean verification")
-            aeocha.assert_str_eq(
+            spec.assert_str_eq(
                 f3app.verification_result_text(3, 1024, 2),
                 "Verification failed: 2 file(s) did not match. Possible flash fraud.",
                 "failed verification")
         }
     }
 
-    aeocha.run_summary(fw)
+    spec.run_summary(fw)
 }

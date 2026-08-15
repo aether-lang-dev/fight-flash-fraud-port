@@ -2,8 +2,15 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-AEOCHA_DIR="${AEOCHA_DIR:-$HOME/scm/AetherThings/aeocha}"
-AETHER_UI_DIR="${AETHER_UI_DIR:-$HOME/scm/AetherThings/aether-ui}"
+
+# Same checkout probe as build-ui.sh — $AETHER_UI_DIR wins, else take the
+# first layout that really exists.
+if [ -z "${AETHER_UI_DIR:-}" ]; then
+    for _cand in "$(dirname "$ROOT")/aether-ui" "$HOME/scm/aether-ui" "$HOME/scm/AetherThings/aether-ui"; do
+        if [ -f "$_cand/tests/lib/uidriver.ae" ]; then AETHER_UI_DIR="$_cand"; break; fi
+    done
+    AETHER_UI_DIR="${AETHER_UI_DIR:-$HOME/scm/aether-ui}"
+fi
 AE="${AE:-ae}"
 PORT="${AETHER_UI_TEST_PORT:-9222}"
 LOG="${TMPDIR:-/tmp}/fight_flash_fraud-ui-test.log"
@@ -13,10 +20,9 @@ if ! command -v "$AE" >/dev/null 2>&1; then
     echo "FAIL: ae not found as '$AE'; run ./bootstrap.sh or set AE" >&2
     exit 1
 fi
-if [ ! -f "$AEOCHA_DIR/aeocha.ae" ]; then
-    echo "FAIL: aeocha not found at $AEOCHA_DIR; run ./bootstrap.sh or set AEOCHA_DIR" >&2
-    exit 1
-fi
+# No aeocha check: the spec framework is `std.spec`, which ships with the
+# toolchain (absorbed from aeocha in ae 0.538.0). uidriver.ae is still a
+# file in the aether-ui checkout, so that one is still verified.
 if [ ! -f "$AETHER_UI_DIR/tests/lib/uidriver.ae" ]; then
     echo "FAIL: aether-ui uidriver not found at $AETHER_UI_DIR; run ./bootstrap.sh or set AETHER_UI_DIR" >&2
     exit 1
@@ -77,5 +83,5 @@ if ! wait_driver; then
 fi
 
 cd "$ROOT"
-env AETHER_F3_CFLAGS="" AETHER_F3_LINK_FLAGS="" AETHER_LIB_DIR="$AEOCHA_DIR:$AETHER_UI_DIR/tests/lib:$ROOT/src" "$AE" build tests/ui/spec_fight_flash_fraud.ae -o build/spec_fight_flash_fraud
+env AETHER_F3_CFLAGS="" AETHER_F3_LINK_FLAGS="" AETHER_LIB_DIR="$AETHER_UI_DIR/tests/lib:$ROOT/src" "$AE" build tests/ui/spec_fight_flash_fraud.ae -o build/spec_fight_flash_fraud
 ./build/spec_fight_flash_fraud

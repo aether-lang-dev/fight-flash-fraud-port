@@ -1,39 +1,39 @@
-import aeocha
+import std.spec
 import uidriver
 
 main() {
-    fw = aeocha.init()
+    fw = spec.init()
     uidriver.wait_server()
 
-    aeocha.describe(fw, "fight_flash_fraud over AetherUIDriver") {
-        aeocha.it("starts with read disabled and honest simulation copy") callback {
+    spec.describe(fw, "fight_flash_fraud over AetherUIDriver") {
+        spec.it("starts with read disabled and honest simulation copy") callback {
             body = uidriver.get_body("/widgets")
-            aeocha.assert_contains(body, "Simulation of 1MB flash", "simulation path description")
-            aeocha.assert_eq(uidriver.widget_bool_by_text("Read and verify", "enabled"), 0,
+            spec.assert_contains(body, "Simulation of 1MB flash", "simulation path description")
+            spec.assert_eq(uidriver.widget_bool_by_text("Read and verify", "enabled"), 0,
                 "read starts disabled")
         }
 
-        aeocha.it("writes the simulation then enables read and reports no fraud") callback {
+        spec.it("writes the simulation then enables read and reports no fraud") callback {
             write = uidriver.widget_id_of("button", "Write test pattern")
-            aeocha.assert_gt(write, 0, "write button found")
+            spec.assert_gt(write, 0, "write button found")
             uidriver.click_widget(write)
 
             wrote = uidriver.wait_body_contains("/widgets", "Ready to read and verify", 40)
-            aeocha.assert_true(wrote, "write completion is visible")
-            aeocha.assert_eq(uidriver.widget_bool_by_text("Read and verify", "enabled"), 1,
+            spec.assert_true(wrote, "write completion is visible")
+            spec.assert_eq(uidriver.widget_bool_by_text("Read and verify", "enabled"), 1,
                 "read enabled after write")
-            aeocha.assert_contains(uidriver.get_body("/widgets"), "?", "grid shows written cells")
+            spec.assert_contains(uidriver.get_body("/widgets"), "?", "grid shows written cells")
 
             read = uidriver.widget_id_of("button", "Read and verify")
-            aeocha.assert_gt(read, 0, "read button found")
+            spec.assert_gt(read, 0, "read button found")
             uidriver.click_widget(read)
 
             verified = uidriver.wait_body_contains("/widgets", "No fraud detected", 40)
-            aeocha.assert_true(verified, "verification verdict is visible")
-            aeocha.assert_contains(uidriver.get_body("/widgets"),
+            spec.assert_true(verified, "verification verdict is visible")
+            spec.assert_contains(uidriver.get_body("/widgets"),
                 "Flash size is correct for tested 1MB", "human no-fraud verdict")
         }
     }
 
-    aeocha.run_summary(fw)
+    spec.run_summary(fw)
 }

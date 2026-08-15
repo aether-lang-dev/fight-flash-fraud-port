@@ -1,5 +1,4 @@
 AE ?= ae
-AEOCHA_DIR ?= $(HOME)/scm/AetherThings/aeocha
 
 BUILD_DIR = build
 SRC_DIR = src
@@ -14,8 +13,10 @@ all: $(TARGETS)
 app: all $(APP_TARGET)
 test: test-unit test-ui
 
+# The spec framework is `std.spec`, which ships inside the toolchain, so
+# the only module dir the unit test needs is this repo's own src.
 test-unit: | $(BUILD_DIR)
-	AETHER_F3_CFLAGS="" AETHER_F3_LINK_FLAGS="" AETHER_LIB_DIR=$(AEOCHA_DIR):$(CURDIR)/src $(AE) build tests/unit/spec_f3app.ae -o $(BUILD_DIR)/spec_f3app
+	AETHER_F3_CFLAGS="" AETHER_F3_LINK_FLAGS="" AETHER_LIB_DIR=$(CURDIR)/src $(AE) build tests/unit/spec_f3app.ae -o $(BUILD_DIR)/spec_f3app
 	$(BUILD_DIR)/spec_f3app
 
 test-ui: app

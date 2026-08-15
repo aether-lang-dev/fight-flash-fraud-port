@@ -1,0 +1,28 @@
+# The oldest Aether release that can build fight_flash_fraud.
+#
+# This is a FLOOR, not a preference. Anything newer on PATH is accepted
+# as-is: a contributor sitting on 0.540 is NOT asked to re-fetch just
+# because a nicer release exists. Bump it only when this repo starts
+# calling a primitive an older Aether lacks, in the SAME commit that
+# introduces the call — never speculatively.
+#
+# Why 0.538.0: `std.spec` — the BDD framework the tests in tests/unit and
+# tests/ui are written against — first shipped in the stdlib at 0.538.0,
+# absorbed from the now-retired standalone aeocha repo. Before that
+# release the specs needed an aeocha CHECKOUT on AETHER_LIB_DIR; they no
+# longer do, and this repo no longer clones one. That is the whole reason
+# the floor sits where it does.
+#
+# Two adjacent absorptions, for whoever bumps this next — neither is used
+# here yet, so neither raises the floor today:
+#   0.538.0  std.os.testing + std.http.client.httptest (process- and
+#            HTTP-shaped matchers)
+#   0.540.0  std.mutation (Tier-1 mutation testing, from aeocha's
+#            contrib/mutate — the last technology blocking aeocha's
+#            archival)
+# Adopting std.mutation in this repo's test story would move this floor
+# to 0.540.0.
+#
+# See AETHER_FETCH for WHICH release to install when this floor is not
+# satisfied — deliberately a different number on a different clock.
+0.538.0

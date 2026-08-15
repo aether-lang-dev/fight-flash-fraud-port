@@ -2,7 +2,23 @@
 set -eu
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-AETHER_UI_DIR="${AETHER_UI_DIR:-$HOME/scm/AetherThings/aether-ui}"
+
+# Resolve the aether-ui checkout. $AETHER_UI_DIR wins; otherwise probe the
+# layouts that actually occur — a sibling of this repo, a flat ~/scm, or
+# the ~/scm/AetherThings grouping — and take the first that is really
+# there. Hardcoding one guess silently compiled against a nonexistent tree
+# and failed later with a confusing "Undefined function 'ui.window'".
+if [ -z "${AETHER_UI_DIR:-}" ]; then
+    for _cand in "$(dirname "$ROOT")/aether-ui" "$HOME/scm/aether-ui" "$HOME/scm/AetherThings/aether-ui"; do
+        if [ -f "$_cand/ui/module.ae" ]; then AETHER_UI_DIR="$_cand"; break; fi
+    done
+    AETHER_UI_DIR="${AETHER_UI_DIR:-$HOME/scm/aether-ui}"
+fi
+if [ ! -f "$AETHER_UI_DIR/ui/module.ae" ]; then
+    echo "Error: aether-ui checkout not found at '$AETHER_UI_DIR' (no ui/module.ae)." >&2
+    echo "       Run ./bootstrap.sh, or set AETHER_UI_DIR to your checkout." >&2
+    exit 1
+fi
 AE="${AE:-ae}"
 AETHERC="${AETHERC:-aetherc}"
 SOURCE="${1:-app/fight_flash_fraud.ae}"
@@ -46,6 +62,7 @@ case "$OS" in
             $LIBNOTIFY_CFLAGS \
             "$C_FILE" \
             "$AETHER_UI_DIR/backend/aether_ui_gtk4.c" \
+            "$AETHER_UI_DIR/backend/aether_ui_test_server.c" \
             "$AETHER_UI_DIR/backend/aether_ui_system_extras.c" \
             "$AETHER_UI_DIR/backend/aether_ui_sni.c" \
             -L"$AETHER_LIB_PATH" -laether \
@@ -57,6 +74,7 @@ case "$OS" in
             $AETHER_INCLUDES \
             "$C_FILE" \
             "$AETHER_UI_DIR/backend/aether_ui_macos.m" \
+            "$AETHER_UI_DIR/backend/aether_ui_test_server.c" \
             "$AETHER_UI_DIR/backend/aether_ui_system_extras.c" \
             -L"$AETHER_LIB_PATH" -laether \
             -o "$OUTPUT" \
