@@ -78,7 +78,8 @@ case "$OS" in
             "$AETHER_UI_DIR/backend/aether_ui_system_extras.c" \
             -L"$AETHER_LIB_PATH" -laether \
             -o "$OUTPUT" \
-            -framework AppKit -framework Foundation -framework QuartzCore -pthread -lm \
+            -framework AppKit -framework Foundation -framework QuartzCore \
+            -framework CoreText -framework ImageIO -framework OpenGL -pthread -lm \
             $AETHER_LIBS
         ;;
     *)

@@ -36,4 +36,24 @@
 # toolchain that cannot build. Aether's release.yml now pins ubuntu-22.04
 # (glibc 2.35). That concern belongs to THIS file, not the pin: it is
 # about which release to fetch, not what the floor is.
-0.542.0
+#
+# --- Raised 0.542.0 -> 0.737.0 (2026-09-29) ---
+#
+# Verified locally on macOS/arm64: `ae 0.737.0` builds build/f3,
+# build/fight_flash_fraud and both spec binaries; tests/unit passes 4/4
+# and tests/ui (over AetherUIDriver) passes 2/2. AETHER_PIN is UNCHANGED
+# (0.538.0) -- nothing here started needing a newer primitive, so this is
+# purely "what to fetch," not a floor move.
+#
+# The GUI build DID need a real fix, but it was aether-ui's drift, not
+# aether's: scripts/build-ui.sh's macOS link line was missing
+# `-framework CoreText -framework ImageIO -framework OpenGL` (gpuview's
+# GL context and friends, added to aether-ui's own canonical darwin link
+# set since this repo's build-ui.sh was last synced with it) and failed
+# with undefined `_glBindFramebuffer` and friends until those three were
+# added. If a future aether-ui pulls in another framework the same way,
+# this script needs a matching update again -- it hand-duplicates
+# aether-ui's link flags rather than sharing them (see README's
+# "why a source checkout" section), so it can drift independently of
+# whatever Aether release is pinned here.
+0.737.0
