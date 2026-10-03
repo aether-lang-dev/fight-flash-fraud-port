@@ -56,4 +56,7 @@
 # aether-ui's link flags rather than sharing them (see README's
 # "why a source checkout" section), so it can drift independently of
 # whatever Aether release is pinned here.
-0.737.0
+#
+# 0.766.0 (2026-10-03): equals AETHER_PIN, the family-wide floor. Verified as
+# AETHER_PIN describes.
+0.766.0

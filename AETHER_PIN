@@ -25,4 +25,11 @@
 #
 # See AETHER_FETCH for WHICH release to install when this floor is not
 # satisfied — deliberately a different number on a different clock.
-0.538.0
+#
+# Raised 0.538.0 -> 0.766.0 (2026-10-03). A POLICY floor: 0.766.0 is the floor
+# Paul set for every Aether-family repo, so they all build against one known
+# release. Nothing here needs a primitive newer than 0.538.0. Verified on the
+# installed 0.766.0 release (macOS arm64): make all clean, make test green
+# (unit + AetherUIDriver UI), and a real `f3 write` / `f3 read` of a 1 GB test
+# file: 0 bytes lost.
+0.766.0
