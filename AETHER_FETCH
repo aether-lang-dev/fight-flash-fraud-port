@@ -59,4 +59,8 @@
 #
 # 0.766.0 (2026-10-03): equals AETHER_PIN, the family-wide floor. Verified as
 # AETHER_PIN describes.
-0.766.0
+#
+# 0.778.0 (2026-10-05): a TRACKING bump with AETHER_PIN, not a new-primitive
+# floor. Verified on the released 0.778.0 with the full suite, as AETHER_PIN
+# describes.
+0.778.0

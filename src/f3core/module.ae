@@ -97,7 +97,7 @@ write_h2w_file(dir: string, number: long, file_size: long) -> string {
     written = zero_long()
     while written < file_size {
         payload = sector_payload(written)
-        n, werr = fs.pwrite(file, payload, SECTOR_SIZE, written)
+        n, werr = fs.pwrite(file, string.bytes(payload)[0..SECTOR_SIZE], written)
         if werr != "" { return "write failed at ${written}: ${werr}" }
         if n != sector_size_long() { return "short write at ${written}" }
         written = written + sector_size_long()

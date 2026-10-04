@@ -32,4 +32,15 @@
 # installed 0.766.0 release (macOS arm64): make all clean, make test green
 # (unit + AetherUIDriver UI), and a real `f3 write` / `f3 read` of a 1 GB test
 # file: 0 bytes lost.
-0.766.0
+#
+# Raised 0.766.0 -> 0.778.0 (2026-10-05). A TRACKING bump, not a new-primitive
+# floor: it follows the family-wide floor up to 0.778.0. Verified on the
+# released 0.778.0 (macOS arm64) with the full suite: make all, make test
+# (unit 4/4 + AetherUIDriver UI 2/2), and a real `f3 write` / `f3 read` of two
+# 256 MB files (0 bytes lost; a flipped byte is caught as 1 bad sector).
+# The same change ports write_h2w_file's fs.pwrite call to the byte[]-slice
+# form (aether #2301, 0.758): the old 4-arg (file, data, len, offset) shape
+# no longer type-checks on 0.758+, so `make all` actually failed on 0.766.0
+# too despite the note above. The code's own strict need is therefore now
+# 0.758.0 (std.spec 0.538.0 + the slice pwrite), still below this floor.
+0.778.0

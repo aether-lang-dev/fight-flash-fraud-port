@@ -50,16 +50,17 @@ Two files, on two different clocks:
 
 ``AETHER_PIN``
     A *floor*: the oldest Aether this repo builds against, currently
-    ``0.766.0``, the floor shared by the whole Aether family. (The code
-    itself needs only ``0.538.0``, the release where ``std.spec`` entered
-    the stdlib.) Otherwise it moves only when the code starts calling a
+    ``0.778.0``, the floor shared by the whole Aether family. (The code
+    itself needs only ``0.758.0``: ``std.spec`` entered the stdlib at
+    ``0.538.0`` and the byte-slice ``fs.pwrite`` form arrived in
+    ``0.758.0``.) Otherwise it moves only when the code starts calling a
     primitive an older Aether lacks, in the same commit that introduces the
     call. If your ``ae`` is already above it, ``bootstrap.sh`` leaves it
     alone.
 
 ``AETHER_FETCH``
     The known-good release to *install* when the floor is not met,
-    currently ``0.542.0``. It must be ``>=`` the pin, and it moves for
+    currently ``0.778.0``. It must be ``>=`` the pin, and it moves for
     reasons unrelated to language features — toolchain portability, a
     fixed codegen bug. A newer number is not automatically better; it is
     another thing to have tested.
