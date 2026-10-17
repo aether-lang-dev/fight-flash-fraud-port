@@ -55,4 +55,11 @@
 # AetherUIDriver UI 2/2) on macOS arm64, Linux arm64 and Linux x86_64 (gcc 11),
 # make all + test-unit on Windows (MINGW64), and a real `f3 write` / `f3 read`
 # on each (0 bytes lost; a flipped byte is caught as 1 bad sector).
-0.823.0
+#
+# Raised 0.823.0 -> 0.824.0 (2026-10-18). A TRACKING bump with the family-wide
+# floor, not a new-primitive floor, and no change at all: nothing here is
+# named like a generated helper (now under _aether_) or spawn_<Actor>, and no
+# closure keeps a slice of its frame (0.824's new E0900 cases). Verified on
+# 0.824.0 built from its tag exactly as for 0.823.0 above, on the same four
+# platforms, against aether-ui origin/main (be93a25).
+0.824.0
