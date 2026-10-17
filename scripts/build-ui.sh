@@ -28,7 +28,14 @@ C_FILE="${OUTPUT}.c"
 cd "$ROOT"
 mkdir -p "$(dirname "$OUTPUT")"
 
-AETHER_INCLUDES="$("$AE" cflags 2>/dev/null | tr ' ' '\n' | grep -E '^-I' | tr '\n' ' ' || true)"
+# `ae cflags` prints the compile flags, then the link flags. Keep the compile
+# half: -I, -D and -f flags, and the two-word -idirafter/-isystem ones, which
+# is how Aether since 0.801.0 puts its runtime and std headers on the path (a
+# grep for ^-I alone kept only the top include dir, and aether_panic.h and
+# the rest were not found). aether-ui's own build.sh reads them the same way.
+AETHER_INCLUDES="$("$AE" cflags 2>/dev/null | tr ' ' '\n' \
+    | awk '/^-(idirafter|isystem)$/ { printf "%s ", $0; if ((getline nxt) > 0) printf "%s ", nxt; next }
+           /^-[IDf]/ { printf "%s ", $0 }' || true)"
 if [ -z "$AETHER_INCLUDES" ]; then
     AETHER_INCLUDES="-I/usr/local/include/aether/runtime -I/usr/local/include/aether/runtime/actors -I/usr/local/include/aether/std -I/usr/local/include/aether/std/collections"
 fi
@@ -56,8 +63,12 @@ case "$OS" in
             LIBNOTIFY_CFLAGS="-DAEUI_HAVE_LIBNOTIFY=1 $(pkg-config --cflags libnotify)"
             LIBNOTIFY_LIBS="$(pkg-config --libs libnotify)"
         fi
+        # epoxy explicitly, as aether-ui's build.sh does: its GTK4 backend
+        # calls GL for gpuview, and gtk4.pc exposes neither epoxy's headers
+        # nor its library (the link failed: "libepoxy.so.0: DSO missing").
         "$CC_BIN" -O0 -g -pipe \
             $(pkg-config --cflags gtk4) \
+            $(pkg-config --cflags epoxy) \
             $AETHER_INCLUDES \
             $LIBNOTIFY_CFLAGS \
             "$C_FILE" \
@@ -67,7 +78,7 @@ case "$OS" in
             "$AETHER_UI_DIR/backend/aether_ui_sni.c" \
             -L"$AETHER_LIB_PATH" -laether \
             -o "$OUTPUT" \
-            -pthread -lm $(pkg-config --libs gtk4) $LIBNOTIFY_LIBS $AETHER_LIBS
+            -pthread -lm $(pkg-config --libs gtk4) $(pkg-config --libs epoxy) $LIBNOTIFY_LIBS $AETHER_LIBS
         ;;
     Darwin)
         clang -O0 -g -fobjc-arc \

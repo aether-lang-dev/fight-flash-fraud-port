@@ -43,4 +43,16 @@
 # no longer type-checks on 0.758+, so `make all` actually failed on 0.766.0
 # too despite the note above. The code's own strict need is therefore now
 # 0.758.0 (std.spec 0.538.0 + the slice pwrite), still below this floor.
-0.778.0
+#
+# Raised 0.778.0 -> 0.823.0 (2026-10-17). A TRACKING bump, not a new-primitive
+# floor: the family-wide floor moves past 0.818's ownership rework. No .ae
+# change was needed (no kept ptr parameter, no string freed by its callee).
+# The GUI build script did need two fixes, both drift in what it copies from
+# aether-ui's build.sh rather than anything this floor demands: `ae cflags`
+# has put its headers behind -idirafter since 0.801.0, which the old ^-I grep
+# dropped (aether_panic.h not found), and the GTK4 link now needs epoxy.
+# Verified on 0.823.0 built from its tag: make all, make test (unit 4/4 +
+# AetherUIDriver UI 2/2) on macOS arm64, Linux arm64 and Linux x86_64 (gcc 11),
+# make all + test-unit on Windows (MINGW64), and a real `f3 write` / `f3 read`
+# on each (0 bytes lost; a flipped byte is caught as 1 bad sector).
+0.823.0
