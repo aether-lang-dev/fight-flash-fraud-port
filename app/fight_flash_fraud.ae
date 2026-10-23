@@ -32,9 +32,9 @@ append_log(log: string, line: string) -> string {
     return string.concat(log, string.concat(line, "\n"))
 }
 
-cell_set(cells: ptr, index: int, label: string) {
+cell_set(status_cells: ptr, index: int, label: string) {
     if index < 0 || index >= GRID_CELLS { return }
-    h = intarr.intarr_get_raw(cells, index)
+    h = intarr.intarr_get_raw(status_cells, index)
     if h != 0 {
         set_text_label(h, label)
     }
@@ -45,10 +45,10 @@ set_button_enabled(handle_ref: ptr, enabled: int) {
     if h != 0 { ui.style_enabled(h, enabled) }
 }
 
-reset_cells(cells: ptr) {
+reset_cells(status_cells: ptr) {
     i = 0
     while i < GRID_CELLS {
-        cell_set(cells, i, " ")
+        cell_set(status_cells, i, " ")
         i = i + 1
     }
 }
@@ -68,11 +68,11 @@ progress_cells(done: long, total: long) -> int {
     return filled
 }
 
-paint_progress(cells: ptr, from_cell: int, done: long, total: long, label: string) -> int {
+paint_progress(status_cells: ptr, from_cell: int, done: long, total: long, label: string) -> int {
     to_cell = progress_cells(done, total)
     i = from_cell
     while i < to_cell {
-        cell_set(cells, i, label)
+        cell_set(status_cells, i, label)
         i = i + 1
     }
     return to_cell
@@ -232,11 +232,11 @@ pick_mount(paths: ptr, index: int) -> string {
 }
 
 write_range(path: string, start: long, end: long, file_size: long,
-            cells: ptr, status_handle: int, bottom_status_ref: ptr,
+            status_cells: ptr, status_handle: int, bottom_status_ref: ptr,
             log_handle: int, log_text: string) -> (string, int) {
     fs.mkdir_p(path)
     count = range_count(start, end)
-    reset_cells(cells)
+    reset_cells(status_cells)
     set_text_label(status_handle, "Writing ${count} file(s) to ${path}")
     set_text_label_ref(bottom_status_ref, "Writing test pattern")
     log_text = append_log(log_text, "write: ${path}, files ${start}..${end}, ${file_size} bytes each")
@@ -248,7 +248,7 @@ write_range(path: string, start: long, end: long, file_size: long,
         set_text_label(status_handle, "Writing ${n}.h2w")
         err = f3core.write_h2w_file(path, n, file_size)
         if err != "" {
-            painted = paint_progress(cells, painted, done + f3core.one_long(), count, "!")
+            painted = paint_progress(status_cells, painted, done + f3core.one_long(), count, "!")
             log_text = append_log(log_text, "write ${n}.h2w: ${err}")
             set_output(log_handle, log_text)
             set_text_label(status_handle, "Write failed at ${n}.h2w")
@@ -256,7 +256,7 @@ write_range(path: string, start: long, end: long, file_size: long,
             return log_text, 0
         }
         done = done + f3core.one_long()
-        painted = paint_progress(cells, painted, done, count, "?")
+        painted = paint_progress(status_cells, painted, done, count, "?")
         log_text = append_log(log_text, "write ${n}.h2w: ok")
         set_output(log_handle, log_text)
         n = n + f3core.one_long()
@@ -266,7 +266,7 @@ write_range(path: string, start: long, end: long, file_size: long,
     return log_text, 1
 }
 
-read_range(path: string, start: long, end: long, file_size_mb: long, cells: ptr,
+read_range(path: string, start: long, end: long, file_size_mb: long, status_cells: ptr,
            status_handle: int, bottom_status_ref: ptr,
            log_handle: int, log_text: string) -> string {
     count = range_count(start, end)
@@ -284,14 +284,14 @@ read_range(path: string, start: long, end: long, file_size_mb: long, cells: ptr,
         done = done + f3core.one_long()
         if err != "" {
             failures = failures + f3core.one_long()
-            painted = paint_progress(cells, painted, done, count, "✕")
+            painted = paint_progress(status_cells, painted, done, count, "✕")
             log_text = append_log(log_text, "read ${n}.h2w: ${err}")
         } else if bad > f3core.zero_long() {
             failures = failures + f3core.one_long()
-            painted = paint_progress(cells, painted, done, count, "✕")
+            painted = paint_progress(status_cells, painted, done, count, "✕")
             log_text = append_log(log_text, "read ${n}.h2w: ${ok} ok, ${bad} bad")
         } else {
-            painted = paint_progress(cells, painted, done, count, "✓")
+            painted = paint_progress(status_cells, painted, done, count, "✓")
             log_text = append_log(log_text, "read ${n}.h2w: ${ok} sectors ok")
         }
         set_output(log_handle, log_text)
@@ -322,7 +322,7 @@ main() {
     log_text = ""
     log_hidden = 1
     write_ready = 0
-    cells, _ = intarr.new_filled(GRID_CELLS, 0)
+    status_cells, _ = intarr.new_filled(GRID_CELLS, 0)
     mount_paths = collections.string_list_new()
     populate_mount_paths(mount_paths)
     mount_index = 0
@@ -414,7 +414,7 @@ main() {
                 cell = aether_ui_text_create("")
                 ui.style_font_size(cell, 12.0)
                 ui.width(cell, 18)
-                intarr.intarr_set_raw(cells, ci, cell)
+                intarr.intarr_set_raw(status_cells, ci, cell)
                 ui.grid_place(status_grid, cell, ci / GRID_COLS, ci % GRID_COLS, 1, 1)
                 ci = ci + 1
             }
@@ -435,7 +435,7 @@ main() {
                         set_button_enabled(read_button_ref, 0)
                     } else {
                         log_text, write_ready = write_range(path_text, start, end, mb * 1048576,
-                                                            cells, status_handle, bottom_status_ref,
+                                                            status_cells, status_handle, bottom_status_ref,
                                                             output_handle, log_text)
                         set_button_enabled(read_button_ref, write_ready)
                     }
@@ -455,7 +455,7 @@ main() {
                             set_text_label(status_handle, "Invalid size")
                             set_text_label_ref(bottom_status_ref, "Invalid size")
                         } else {
-                            log_text = read_range(path_text, start, end, mb, cells,
+                            log_text = read_range(path_text, start, end, mb, status_cells,
                                                   status_handle, bottom_status_ref,
                                                   output_handle, log_text)
                         }

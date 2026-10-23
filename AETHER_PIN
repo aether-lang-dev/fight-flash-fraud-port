@@ -62,4 +62,16 @@
 # closure keeps a slice of its frame (0.824's new E0900 cases). Verified on
 # 0.824.0 built from its tag exactly as for 0.823.0 above, on the same four
 # platforms, against aether-ui origin/main (be93a25).
-0.824.0
+#
+# Raised 0.824.0 -> 0.841.0 (2026-10-23), the family move together with aeb
+# v0.333 (this repo uses no aeb). Evidence-based, not a tracking bump: 0.841.0
+# rejects app/fight_flash_fraud.ae as it stood. The GUI kept a local named
+# `cells`, and aether-ui exports a builder of that name (`ui.cells`, which keeps
+# its ptr parameter); under the 0.836-0.840 ownership rules the call sites that
+# passed the local on (intarr_set_raw, write_range, read_range) failed with
+# E0902 ("'cells' keeps its `ptr` parameter 1 (@keep)"). It is `status_cells`
+# now. The CLI (src/, f3) and the unit spec needed no change. Verified on 0.841.0
+# from its release install: make all, make test (unit 4/4, AetherUIDriver UI
+# 2/2) on macOS arm64 against aether-ui ce368adf, and a real f3 write / f3 read
+# on a temp directory (0 bytes lost).
+0.841.0

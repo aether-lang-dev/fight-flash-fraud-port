@@ -71,4 +71,7 @@
 # 0.824.0 (2026-10-18): a TRACKING bump with AETHER_PIN, not a new-primitive
 # floor. Verified with the full suite on four platforms, as AETHER_PIN
 # describes.
-0.824.0
+#
+# 0.841.0 (2026-10-23): moved with AETHER_PIN, which has the evidence (E0902
+# on the GUI's `cells` local against aether-ui's `ui.cells`).
+0.841.0
