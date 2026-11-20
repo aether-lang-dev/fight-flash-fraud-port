@@ -80,4 +80,8 @@
 # are no longer the same number: 0.850.0 is the oldest release that has
 # `fs.close`, 0.927.0 is the one the full suite was actually run on (make all,
 # make test-unit 4 passing, make app, make test-ui 2 passing under xvfb).
-0.927.0
+0#
+# 0.931.0 (2026-11-20): a TRACKING bump, no new primitive needed; AETHER_PIN
+# stays 0.850.0. Verified on the released 0.931.0 (Linux x86_64, cachyos): make
+# all, make test-unit 4 passing, make app, make test-ui 2 passing under xvfb.
+0.931.0

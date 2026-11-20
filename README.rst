@@ -60,7 +60,7 @@ Two files, on two different clocks:
 
 ``AETHER_FETCH``
     The known-good release to *install* when the floor is not met,
-    currently ``0.927.0``. It must be ``>=`` the pin, and it moves for
+    currently ``0.931.0``. It must be ``>=`` the pin, and it moves for
     reasons unrelated to language features — toolchain portability, a
     fixed codegen bug. A newer number is not automatically better; it is
     another thing to have tested.
