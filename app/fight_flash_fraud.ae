@@ -174,7 +174,7 @@ mounted_flash_like(source: string, mountpoint: string) -> int {
 read_proc_file(path: string) -> string {
     file, err = fs.open(path, "r")
     if err != "" { return "" }
-    defer fs.file_close(file)
+    defer fs.close(file)
     acc = ""
     offset = f3core.zero_long()
     while true {

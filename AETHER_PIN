@@ -74,4 +74,21 @@
 # from its release install: make all, make test (unit 4/4, AetherUIDriver UI
 # 2/2) on macOS arm64 against aether-ui ce368adf, and a real f3 write / f3 read
 # on a temp directory (0 bytes lost).
-0.841.0
+#
+# Raised 0.841.0 -> 0.850.0 (2026-11-20). Evidence-based: this is a new-primitive
+# floor again. The code closes its file handles with `fs.close`, which first
+# shipped in 0.850.0 (aether #3179: `fs.close` and `fs.read_all` for the handle
+# `fs.open` gives). That change also freed the C symbol `file_close` by renaming
+# the old int-returning binding to `file_close_raw`, so `fs.file_close(file)`,
+# which this repo called in src/f3core/module.ae (write_h2w_file and
+# read_h2w_file) and in app/fight_flash_fraud.ae (read_proc_file), no longer
+# compiles on 0.850.0 or later, and `fs.close` does not exist before it: no
+# release builds both spellings, so the floor and the rename move together.
+# `fs.close` returns "" or the reason, but the three call sites are deferred
+# and their result was never read, so behaviour is unchanged. Nothing else in
+# the repo was refused by 0.927.0. Verified on the released 0.927.0 (Linux
+# x86_64, gcc 16): make all, make test-unit (4 passing), make app, make test-ui
+# (AetherUIDriver UI, 2 passing, under xvfb), and a real f3 write / f3 read of
+# two 4 MB files (0 bytes lost). Not rebuilt on 0.850.0 itself: that is the
+# first release with the call, taken from its changelog, not a measured floor.
+0.850.0

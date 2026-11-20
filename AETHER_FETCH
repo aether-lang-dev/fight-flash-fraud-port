@@ -74,4 +74,10 @@
 #
 # 0.841.0 (2026-10-23): moved with AETHER_PIN, which has the evidence (E0902
 # on the GUI's `cells` local against aether-ui's `ui.cells`).
-0.841.0
+#
+# 0.927.0 (2026-11-20): the latest published release when AETHER_PIN moved to
+# 0.850.0 (the floor move and its reason are recorded there). Fetch and floor
+# are no longer the same number: 0.850.0 is the oldest release that has
+# `fs.close`, 0.927.0 is the one the full suite was actually run on (make all,
+# make test-unit 4 passing, make app, make test-ui 2 passing under xvfb).
+0.927.0

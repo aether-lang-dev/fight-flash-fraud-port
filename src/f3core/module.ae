@@ -92,7 +92,7 @@ write_h2w_file(dir: string, number: long, file_size: long) -> string {
     path = h2w_path(dir, number)
     file, err = fs.open(path, "w+")
     if err != "" { return "cannot create ${path}: ${err}" }
-    defer fs.file_close(file)
+    defer fs.close(file)
 
     written = zero_long()
     while written < file_size {
@@ -137,7 +137,7 @@ read_h2w_file(dir: string, number: long) -> {
     path = h2w_path(dir, number)
     file, err = fs.open(path, "r")
     if err != "" { return zero_long(), zero_long(), "cannot open ${path}: ${err}" }
-    defer fs.file_close(file)
+    defer fs.close(file)
 
     ok = zero_long()
     bad = zero_long()
