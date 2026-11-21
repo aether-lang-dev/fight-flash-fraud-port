@@ -84,4 +84,7 @@
 # 0.931.0 (2026-11-20): a TRACKING bump, no new primitive needed; AETHER_PIN
 # stays 0.850.0. Verified on the released 0.931.0 (Linux x86_64, cachyos): make
 # all, make test-unit 4 passing, make app, make test-ui 2 passing under xvfb.
-0.931.0
+# 0.933.0 (2026-11-21): a TRACKING bump again, no new primitive needed; AETHER_PIN
+# stays 0.850.0. Verified on the released 0.933.0 (Linux x86_64, ae-x64): make
+# all, make test-unit 4 passing, make app, make test-ui 2 passing under xvfb.
+0.933.0
