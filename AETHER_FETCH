@@ -90,4 +90,7 @@
 # 0.935.0 (2026-11-22): a TRACKING bump again, no new primitive needed; AETHER_PIN
 # stays 0.850.0. Verified on the released 0.935.0, Linux x86_64 (cachyos): make test, and
 # make test-ui under xvfb.
-0.935.0
+0# 0.936.0 (2026-11-22): a TRACKING bump again, no new primitive needed; AETHER_PIN
+# stays 0.850.0. Verified on the released 0.936.0, Linux x86_64 (cachyos): make test
+# (unit and the UI suite under xvfb).
+0.936.0
