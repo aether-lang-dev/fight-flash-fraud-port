@@ -90,7 +90,11 @@
 # 0.935.0 (2026-11-22): a TRACKING bump again, no new primitive needed; AETHER_PIN
 # stays 0.850.0. Verified on the released 0.935.0, Linux x86_64 (cachyos): make test, and
 # make test-ui under xvfb.
-0# 0.936.0 (2026-11-22): a TRACKING bump again, no new primitive needed; AETHER_PIN
+# 0.936.0 (2026-11-22): a TRACKING bump again, no new primitive needed; AETHER_PIN
 # stays 0.850.0. Verified on the released 0.936.0, Linux x86_64 (cachyos): make test
 # (unit and the UI suite under xvfb).
-0.936.0
+# 0.939.0 (2026-11-23): a TRACKING bump again, no new primitive needed; AETHER_PIN
+# stays 0.850.0. Verified on the released 0.939.0, Linux x86_64 (cachyos): make test-unit
+# (4 passing) and make test-ui under xvfb (2 passing). The port makes no HTTP requests,
+# so the removal of std.http.client's process-wide pool in 0.939.0 touches nothing here.
+0.939.0
