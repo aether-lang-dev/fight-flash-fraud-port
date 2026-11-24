@@ -97,4 +97,9 @@
 # stays 0.850.0. Verified on the released 0.939.0, Linux x86_64 (cachyos): make test-unit
 # (4 passing) and make test-ui under xvfb (2 passing). The port makes no HTTP requests,
 # so the removal of std.http.client's process-wide pool in 0.939.0 touches nothing here.
-0.939.0
+# 0.941.0 (2026-11-24): a TRACKING bump again, no new primitive needed, no source change;
+# AETHER_PIN stays 0.850.0. Verified on the released 0.941.0, Linux x86_64 (ae-x64): make test-unit
+# (4 passing) and make test-ui under xvfb (2 passing), plus an f3 write/read of 8 MB into a temp
+# dir (0 bytes lost). The port makes no HTTP requests and sends no actor messages, so the
+# 0.940.0/0.941.0 client-retry, error-wording and actor-batching changes touch nothing here.
+0.941.0
