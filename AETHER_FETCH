@@ -107,4 +107,7 @@
 # (4 passing), make app and make test-ui under xvfb (2 passing). The port makes no HTTP requests and
 # sends no actor messages; 0.942.0-0.944.0 are performance only (actor batching, inline std.math
 # scalars, inline slice-view release). The f3 CLI write/read was not re-run.
-0.945.0
+# 0.946.0 (2026-11-25): a TRACKING bump again, no new primitive needed, no source change;
+# AETHER_PIN stays 0.850.0. Verified on the released 0.946.0, FreeBSD 15.1 amd64 (ghostbsd):
+# gmake test-unit (4 passing). The port makes no HTTP requests and sends no actor messages.
+0.946.0
