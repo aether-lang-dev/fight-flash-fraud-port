@@ -110,4 +110,9 @@
 # 0.946.0 (2026-11-25): a TRACKING bump again, no new primitive needed, no source change;
 # AETHER_PIN stays 0.850.0. Verified on the released 0.946.0, FreeBSD 15.1 amd64 (ghostbsd):
 # gmake test-unit (4 passing). The port makes no HTTP requests and sends no actor messages.
-0.946.0
+# 0.949.0 (2026-11-28): a TRACKING bump again, no new primitive needed, no source change;
+# AETHER_PIN stays 0.850.0. Verified on the released 0.949.0, Linux x86_64 (ae-x64): gmake test-unit
+# (4 passing), gmake app and gmake test-ui under xvfb-run (2 passing); FreeBSD 15.1 amd64 (ghostbsd):
+# gmake test-unit (4 passing). Nothing here uses string.to_double (renamed to_float in 0.948.0) or
+# os.which/os.getcwd (sandbox-checked since 0.947.0).
+0.949.0
